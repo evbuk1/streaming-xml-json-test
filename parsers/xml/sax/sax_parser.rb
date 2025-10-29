@@ -42,7 +42,7 @@ class TransformHandler < Nokogiri::XML::SAX::Document
 end
 
 if ARGV.length < 2
-  puts "Usage: ruby transform_records_streaming.rb input.xml output.xml"
+  puts "Usage: ruby sax_parser.rb input.xml output.xml"
   exit 1
 end
 

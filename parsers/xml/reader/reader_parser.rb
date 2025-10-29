@@ -2,7 +2,7 @@
 require 'nokogiri'
 
 if ARGV.length < 2
-  warn "Usage: ruby reader_parser INPUT_FILE OUTPUT_FILE"
+  warn "Usage: ruby reader_parser.rb INPUT_FILE OUTPUT_FILE"
   exit 1
 end
 
