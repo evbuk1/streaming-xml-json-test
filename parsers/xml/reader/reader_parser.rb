@@ -1,0 +1,42 @@
+#!/usr/bin/env ruby
+require 'nokogiri'
+
+if ARGV.length < 2
+  warn "Usage: ruby reader_parser INPUT_FILE OUTPUT_FILE"
+  exit 1
+end
+
+input_file, output_file = ARGV
+
+start_time = Time.now
+
+start_mem = GC.stat[:total_allocated_mem]
+
+File.open(output_file, 'w') do |out|
+  out.puts '<?xml version="1.0" encoding="UTF-8"?>'
+
+  reader = Nokogiri::XML::Reader(File.open(input_file))
+
+  reader.each do |node|
+    case node.node_type
+    when Nokogiri::XML::Reader::TYPE_ELEMENT
+      element_name = node.name == 'description' ? 'event_details' : node.name
+      out.puts "<#{element_name}>"
+    when Nokogiri::XML::Reader::TYPE_END_ELEMENT
+      element_name = node.name == 'description' ? 'event_details' : node.name
+      out.puts "</#{element_name}>"
+    when Nokogiri::XML::Reader::TYPE_TEXT
+      text = node.value.strip
+      out.puts text unless text.empty?
+    end
+  end
+end
+
+end_time = Time.now
+end_mem  = GC.stat[:total_allocated_mem]
+
+elapsed = end_time - start_time
+mem_used = end_mem - start_mem
+
+puts "Time taken: #{elapsed.round(3)} seconds"
+puts "Memory used: #{mem_used / 1024.0} KB"
