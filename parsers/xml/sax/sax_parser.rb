@@ -62,7 +62,6 @@ end
 
 end_time = Time.now
 end_mem  = ObjectSpace.memsize_of_all
-elapsed = end_time - start_time
 
-puts "Time taken: #{elapsed.round(3)} seconds"
+puts "Total time taken: #{(end_time - start_time).round(2)} seconds"
 puts "Memory used: #{((end_mem - start_mem) / (1024.0 * 1024.0)).round(2)} MB"

@@ -26,7 +26,6 @@ input_file, output_file = ARGV
 start_time = Time.now
 start_mem = ObjectSpace.memsize_of_all
 
-
 data = JSON.parse(File.read(input_file))
 updated_data = rename_key(data, 'eventName', 'nameOfEvent')
 File.write(output_file, JSON.pretty_generate(updated_data))
