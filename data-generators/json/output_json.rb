@@ -3,7 +3,7 @@
 require 'json'
 require 'securerandom'
 
-# Usage: ruby generate_dummy_json.rb <output_file> <size_in_mb>
+# Usage: ruby output_json.rb <output_file> <size_in_mb>
 
 output_file = ARGV[0] || "dummy.json"
 target_mb   = (ARGV[1] || 10).to_f

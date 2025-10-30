@@ -2,7 +2,6 @@
 
 # Usage:
 #   ruby output_xml.rb output.xml 10
-#   Creates a ~10MB file named output.xml
 
 require 'securerandom'
 
