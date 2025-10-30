@@ -13,7 +13,7 @@ puts "Generating #{target_mb} MB of dummy JSON data in '#{output_file}'..."
 
 File.open(output_file, 'w') do |file|
   file.write("[\n")  # Start JSON array
-  size = 2  # Start with 2 bytes for '[' and '\n'
+  size = 2
   first = true
 
   while size < target_bytes
@@ -74,5 +74,5 @@ File.open(output_file, 'w') do |file|
     size += json_str.bytesize
   end
 
-  file.write("\n]\n")  # Close JSON array
+  file.write("\n]\n")
 end

@@ -20,13 +20,16 @@ File.open(output_file, 'w') do |out|
   reader.each do |node|
     case node.node_type
     when Nokogiri::XML::Reader::TYPE_ELEMENT
-      element_name = node.name == 'description' ? 'event_details' : node.name
+      element_name = node.name == 'instock' ? 'tickets_available' : node.name
       out.puts "<#{element_name}>"
     when Nokogiri::XML::Reader::TYPE_END_ELEMENT
-      element_name = node.name == 'description' ? 'event_details' : node.name
+      element_name = node.name == 'instock' ? 'tickets_available' : node.name
       out.puts "</#{element_name}>"
     when Nokogiri::XML::Reader::TYPE_TEXT
       text = node.value.strip
+      out.puts text unless text.empty?
+    when Nokogiri::XML::Reader::TYPE_CDATA
+      text = node.outer_xml
       out.puts text unless text.empty?
     end
   end

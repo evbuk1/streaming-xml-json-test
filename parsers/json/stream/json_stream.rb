@@ -19,7 +19,7 @@ def rename_tags(data)
     data.map { |item| rename_tags(item) }
   when Hash
     data.each_with_object({}) do |(k, v), new_hash|
-      new_key = (k == 'tags') ? 'event_information' : k
+      new_key = (k == 'eventName') ? 'nameOfEvent' : k
       new_hash[new_key] = rename_tags(v)
     end
   else
@@ -29,7 +29,6 @@ end
 
 File.open(input_file, 'r') do |in_file|
   File.open(output_file, 'w') do |out_file|
-    # Set up encoder and parser
     encoder = Yajl::Encoder.new(out_file)
     parser  = Yajl::Parser.new(symbolize_keys: false)
 
@@ -42,7 +41,6 @@ File.open(input_file, 'r') do |in_file|
   end
 end
 
-GC.start
 end_time = Time.now
 end_mem = GC.stat(:total_allocated_memory)
 

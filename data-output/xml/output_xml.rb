@@ -14,7 +14,6 @@ puts "Generating #{target_size_mb} MB of dummy XML data into '#{output_file}'...
 
 def generate_record(id)
   <<~XML
-    <event>
       <event id="#{SecureRandom.uuid.to_s}">
         <eventtitle><![CDATA[The Almighty - Blood, Fire &amp; Five&hellip; In Twenty Five!]]></eventtitle>
         <eventsubtitle><![CDATA[+ Very Special Guests Wolfsbane]]></eventsubtitle>

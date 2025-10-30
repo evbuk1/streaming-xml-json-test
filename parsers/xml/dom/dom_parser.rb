@@ -17,8 +17,8 @@ xml_content = File.read(input_file)
 
 doc = Nokogiri::XML(xml_content)
 
-doc.xpath('//record/description').each do |desc_node|
-  new_node = Nokogiri::XML::Node.new('event_details', doc)
+doc.xpath('//event/instock').each do |desc_node|
+  new_node = Nokogiri::XML::Node.new('tickets_available', doc)
   new_node.content = desc_node.content
   desc_node.replace(new_node)
 end
