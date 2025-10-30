@@ -29,7 +29,7 @@ class TransformHandler < Nokogiri::XML::SAX::Document
   end
 
   def end_element(name)
-    element_name = (name == 'description' ? 'event_details' : name)
+    element_name = (name == 'instock' ? 'tickets_available' : name)
     @output.print("</#{element_name}>")
     @output.flush
     @current_element = nil

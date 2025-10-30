@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # Usage:
-#   ruby generate_dummy_xml.rb output.xml 10
+#   ruby output_xml.rb output.xml 10
 #   Creates a ~10MB file named output.xml
 
 require 'securerandom'
@@ -137,8 +137,6 @@ File.open(output_file, 'w') do |f|
     f.write(record)
     bytes_written += record.bytesize
     record_id += 1
-
-    print "\rProgress: #{(bytes_written.to_f / target_size_bytes * 100).round(1)}%" if record_id % 100 == 0
   end
 
   f.puts "\n</events>"
