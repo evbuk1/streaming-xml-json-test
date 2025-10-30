@@ -49,8 +49,8 @@ end
 input_file  = ARGV[0]
 output_file = ARGV[1]
 
+GC.start
 start_time = Time.now
-
 start_mem = GC.stat[:total_allocated_mem]
 
 File.open(output_file, 'w') do |out|
@@ -61,11 +61,10 @@ File.open(output_file, 'w') do |out|
   end
 end
 
+GC.start
 end_time = Time.now
 end_mem  = GC.stat[:total_allocated_mem]
-
 elapsed = end_time - start_time
-mem_used = end_mem - start_mem
 
 puts "Time taken: #{elapsed.round(3)} seconds"
-puts "Memory used: #{mem_used / 1024.0} KB"
+puts "Memory used: #{((end_mem - start_mem) / (1024.0 * 1024.0)).round(2)} MB"

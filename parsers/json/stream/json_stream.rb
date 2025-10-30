@@ -9,8 +9,8 @@ end
 input_file  = ARGV[0]
 output_file = ARGV[1]
 
-start_time = Time.now
 GC.start
+start_time = Time.now
 start_mem = GC.stat(:total_allocated_memory)
 
 def rename_tags(data)
@@ -41,6 +41,7 @@ File.open(input_file, 'r') do |in_file|
   end
 end
 
+GC.start
 end_time = Time.now
 end_mem = GC.stat(:total_allocated_memory)
 

@@ -10,8 +10,9 @@ end
 input_file = ARGV[0]
 output_file = ARGV[1]
 
+GC.start
 start_time = Time.now
-start_memory = memory_usage_mb
+start_mem = GC.stat(:total_allocated_memory)
 
 xml_content = File.read(input_file)
 
@@ -25,8 +26,9 @@ end
 
 File.open(output_file, 'w') { |file| file.write(doc.to_xml) }
 
+GC.start
 end_time = Time.now
-end_memory = memory_usage_mb
+end_mem = GC.stat(:total_allocated_memory)
 
-puts "Time taken: #{(end_time - start_time).round(3)} seconds"
-puts "Memory used: #{(end_memory - start_memory).round(3)} MB"
+puts "Total time taken: #{(end_time - start_time).round(2)} seconds"
+puts "Memory used: #{((end_mem - start_mem) / (1024.0 * 1024.0)).round(2)} MB"
