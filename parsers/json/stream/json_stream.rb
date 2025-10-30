@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 require 'yajl'
+require 'objspace'
 
 if ARGV.length != 2
   puts "Usage: ruby json_stream.rb <input_file> <output_file>"
@@ -9,9 +10,8 @@ end
 input_file  = ARGV[0]
 output_file = ARGV[1]
 
-GC.start
 start_time = Time.now
-start_mem = GC.stat(:total_allocated_memory)
+start_mem = ObjectSpace.memsize_of_all
 
 def rename_tags(data)
   case data
@@ -41,9 +41,8 @@ File.open(input_file, 'r') do |in_file|
   end
 end
 
-GC.start
 end_time = Time.now
-end_mem = GC.stat(:total_allocated_memory)
+end_mem = ObjectSpace.memsize_of_all
 
 puts "Total time taken: #{(end_time - start_time).round(2)} seconds"
 puts "Memory used: #{((end_mem - start_mem) / (1024.0 * 1024.0)).round(2)} MB"

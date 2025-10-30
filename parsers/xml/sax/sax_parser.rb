@@ -41,7 +41,7 @@ class TransformHandler < Nokogiri::XML::SAX::Document
   end
 end
 
-if ARGV.length < 2
+if ARGV.length != 2
   puts "Usage: ruby sax_parser.rb input.xml output.xml"
   exit 1
 end
@@ -49,9 +49,8 @@ end
 input_file  = ARGV[0]
 output_file = ARGV[1]
 
-GC.start
 start_time = Time.now
-start_mem = GC.stat[:total_allocated_mem]
+start_mem = ObjectSpace.memsize_of_all
 
 File.open(output_file, 'w') do |out|
   parser = Nokogiri::XML::SAX::Parser.new(TransformHandler.new(out))
@@ -61,9 +60,8 @@ File.open(output_file, 'w') do |out|
   end
 end
 
-GC.start
 end_time = Time.now
-end_mem  = GC.stat[:total_allocated_mem]
+end_mem  = ObjectSpace.memsize_of_all
 elapsed = end_time - start_time
 
 puts "Time taken: #{elapsed.round(3)} seconds"

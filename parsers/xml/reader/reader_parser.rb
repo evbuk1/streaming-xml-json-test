@@ -1,16 +1,16 @@
 #!/usr/bin/env ruby
 require 'nokogiri'
+require 'objspace'
 
-if ARGV.length < 2
+if ARGV.length != 2
   warn "Usage: ruby reader_parser.rb INPUT_FILE OUTPUT_FILE"
   exit 1
 end
 
 input_file, output_file = ARGV
 
-GC.start
 start_time = Time.now
-start_mem = GC.stat[:total_allocated_mem]
+start_mem = ObjectSpace.memsize_of_all
 
 File.open(output_file, 'w') do |out|
   out.puts '<?xml version="1.0" encoding="UTF-8"?>'
@@ -35,9 +35,8 @@ File.open(output_file, 'w') do |out|
   end
 end
 
-GC.start
 end_time = Time.now
-end_mem  = GC.stat[:total_allocated_mem]
+end_mem  = ObjectSpace.memsize_of_all
 elapsed = end_time - start_time
 
 puts "Time taken: #{elapsed.round(3)} seconds"

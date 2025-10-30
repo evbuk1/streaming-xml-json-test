@@ -1,5 +1,6 @@
 require 'json'
 require 'benchmark'
+require 'objspace'
 
 def rename_key(obj, old_key, new_key)
   case obj
@@ -15,24 +16,23 @@ def rename_key(obj, old_key, new_key)
   end
 end
 
-# === Main Program ===
+if ARGV.length != 2
+  puts "Usage: ruby json_dom.rb <input.json> <output.json>"
+  exit 1
+end
 
-input_file = 'input.json'
-output_file = 'output.json'
+input_file, output_file = ARGV
 
-GC.start
 start_time = Time.now
-start_mem = GC.stat(:total_allocated_memory)
+start_mem = ObjectSpace.memsize_of_all
 
 
 data = JSON.parse(File.read(input_file))
-updated_data = rename_key(data, old_key, new_key)
+updated_data = rename_key(data, 'eventName', 'nameOfEvent')
 File.write(output_file, JSON.pretty_generate(updated_data))
 
-
-GC.start # Run garbage collection again to clean up
 end_time = Time.now
-end_mem = GC.stat(:total_allocated_memory)
+end_mem = ObjectSpace.memsize_of_all
 
 puts "Total time taken: #{(end_time - start_time).round(2)} seconds"
 puts "Memory used: #{((end_mem - start_mem) / (1024.0 * 1024.0)).round(2)} MB"
