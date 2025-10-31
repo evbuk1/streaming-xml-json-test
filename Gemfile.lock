@@ -1,0 +1,26 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    bigdecimal (3.3.1)
+    ffi (1.17.2-x86_64-linux-gnu)
+    get_process_mem (1.0.0)
+      bigdecimal (>= 2.0)
+      ffi (~> 1.0)
+    nokogiri (1.18.10-x86_64-linux-gnu)
+      racc (~> 1.4)
+    oj (3.16.12)
+      bigdecimal (>= 3.0)
+      ostruct (>= 0.2)
+    ostruct (0.6.3)
+    racc (1.8.1)
+
+PLATFORMS
+  x86_64-linux
+
+DEPENDENCIES
+  get_process_mem
+  nokogiri
+  oj
+
+BUNDLED WITH
+   2.6.8
