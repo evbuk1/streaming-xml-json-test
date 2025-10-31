@@ -1,48 +1,57 @@
 #!/usr/bin/env ruby
-require 'yajl'
-require 'objspace'
+
+require 'oj'
+require 'get_process_mem'
 
 if ARGV.length != 2
-  puts "Usage: ruby json_stream.rb <input_file> <output_file>"
+  puts "Usage: ruby json_stream.rb input.xml output.xml"
   exit 1
 end
 
-input_file  = ARGV[0]
-output_file = ARGV[1]
+input_path, output_path = ARGV
 
-start_time = Time.now
-start_mem = ObjectSpace.memsize_of_all
+mem = GetProcessMem.new
+start_mem = mem.mb.round(2)
 
-def rename_tags(data)
-  case data
-  when Array
-    data.map { |item| rename_tags(item) }
-  when Hash
-    data.each_with_object({}) do |(k, v), new_hash|
-      new_key = (k == 'eventName') ? 'nameOfEvent' : k
-      new_hash[new_key] = rename_tags(v)
-    end
-  else
-    data
+class EventParser < ::Oj::Saj
+  def initialize(output_io)
+    @output = output_io
+  end
+
+  def hash_start(key)
+    @output.print('{')
+    @output.flush
+  end
+
+  def hash_end(key)
+    @output.print('}')
+    @output.flush
+  end
+
+  def array_start(key)
+    @output.print('[')
+    @output.flush
+  end
+
+  def array_end(key)
+    @output.print(']')
+    @output.flush
+  end
+
+  def add_value(value, key)
+    @output.print("\"#{key}\": \"#{value}\",")
+    @output.flush
   end
 end
 
-File.open(input_file, 'r') do |in_file|
-  File.open(output_file, 'w') do |out_file|
-    encoder = Yajl::Encoder.new(out_file)
-    parser  = Yajl::Parser.new(symbolize_keys: false)
-
-    parser.on_parse_complete = lambda do |obj|
-      renamed_obj = rename_tags(obj)
-      encoder.encode(renamed_obj)
-    end
-
-    parser.parse(in_file)
-  end
+output = File.open(output_path, 'w')
+handler = EventParser.new(output)
+File.open(input_path, 'r') do |input|
+    Oj.saj_parse(handler, input)
 end
 
-end_time = Time.now
-end_mem = ObjectSpace.memsize_of_all
+output.close
 
-puts "Total time taken: #{(end_time - start_time).round(2)} seconds"
-puts "Memory used: #{((end_mem - start_mem) / (1024.0 * 1024.0)).round(2)} MB"
+end_mem = mem.mb.round(2)
+
+puts "Memory used: #{(end_mem - start_mem).round(2)} MB"

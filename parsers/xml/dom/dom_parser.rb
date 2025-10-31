@@ -1,7 +1,7 @@
 require 'nokogiri'
 require 'securerandom'
 require 'time'
-require 'objspace'
+require 'get_process_mem'
 
 if ARGV.length != 2
   puts "Usage: ruby dom_parser.rb input_file.xml output_file.xml"
@@ -12,7 +12,8 @@ input_file = ARGV[0]
 output_file = ARGV[1]
 
 start_time = Time.now
-start_mem = ObjectSpace.memsize_of_all
+mem = GetProcessMem.new
+start_mem = mem.mb.round(2)
 
 xml_content = File.read(input_file)
 
@@ -27,7 +28,7 @@ end
 File.open(output_file, 'w') { |file| file.write(doc.to_xml) }
 
 end_time = Time.now
-end_mem = ObjectSpace.memsize_of_all
+end_mem = mem.mb.round(2)
 
 puts "Total time taken: #{(end_time - start_time).round(2)} seconds"
-puts "Memory used: #{((end_mem - start_mem) / (1024.0 * 1024.0)).round(2)} MB"
+puts "Memory used: #{(end_mem - start_mem).round(2)} MB"

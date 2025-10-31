@@ -5,4 +5,5 @@ source "https://rubygems.org"
 git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 
 gem 'nokogiri'
-gem 'yajl-ruby', require: 'yajl'
+gem 'yajl-ruby', '1.4.1', require: 'yajl'
+gem 'get_process_mem'

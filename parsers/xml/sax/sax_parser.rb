@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'nokogiri'
+require 'get_process_mem'
 
 class TransformHandler < Nokogiri::XML::SAX::Document
   def initialize(output_io)
@@ -24,7 +25,7 @@ class TransformHandler < Nokogiri::XML::SAX::Document
 
   def characters(string)
     return if string.strip.empty?
-    @output.print(Nokogiri::XML::Text.new(string, nil).to_s)
+    @output.print(string)
     @output.flush
   end
 
@@ -50,7 +51,8 @@ input_file  = ARGV[0]
 output_file = ARGV[1]
 
 start_time = Time.now
-start_mem = ObjectSpace.memsize_of_all
+mem = GetProcessMem.new
+start_mem = mem.mb.round(2)
 
 File.open(output_file, 'w') do |out|
   parser = Nokogiri::XML::SAX::Parser.new(TransformHandler.new(out))
@@ -61,7 +63,7 @@ File.open(output_file, 'w') do |out|
 end
 
 end_time = Time.now
-end_mem  = ObjectSpace.memsize_of_all
+end_mem  = mem.mb.round(2)
 
 puts "Total time taken: #{(end_time - start_time).round(2)} seconds"
-puts "Memory used: #{((end_mem - start_mem) / (1024.0 * 1024.0)).round(2)} MB"
+puts "Memory used: #{(end_mem - start_mem).round(2)} MB"
