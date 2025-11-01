@@ -7,3 +7,4 @@ git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 gem 'get_process_mem'
 gem 'nokogiri'
 gem 'oj'
+gem 'yajl-ruby', require: 'yajl'

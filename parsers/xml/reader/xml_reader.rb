@@ -5,7 +5,7 @@ require 'get_process_mem'
 require 'time'
 
 if ARGV.length != 2
-  puts "Usage: ruby reader_parser.rb input_file.xml output_file.xml"
+  puts "Usage: ruby xml_reader.rb input_file.xml output_file.xml"
   exit
 end
 

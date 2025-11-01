@@ -6,7 +6,7 @@ require 'time'
 require_relative '../../../processors/json/saj/saj_event_parser'
 
 if ARGV.length != 2
-  puts "Usage: ruby json_stream.rb input.json output.json"
+  puts "Usage: ruby json_saj.rb input.json output.json"
   exit
 end
 
