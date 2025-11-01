@@ -4,6 +4,7 @@ require 'json'
 require 'time'
 require 'get_process_mem'
 require 'yajl'
+require_relative '../../../processors/json/reader/reader_event_parser'
 
 # Usage: ruby process_json.rb input.json output.json old_key new_key
 if ARGV.length != 2
@@ -38,34 +39,7 @@ File.open(input_file, 'r') do |infile|
       Yajl::Encoder.encode(object, outfile)
     end
 
-    buffer = ""
-    depth = 0
-    inside_array = false
-
-    infile.each_char do |ch|
-      case ch
-      when '['
-        if !inside_array
-          inside_array = true
-          next
-        end
-      when ']'
-        if depth == 0
-          break
-        end
-      when '{'
-        depth += 1
-      when '}'
-        depth -= 1
-      end
-      buffer << ch
-
-      if depth == 0 && !buffer.strip.empty?
-        buffer = buffer.chomp(',')
-        parser.parse(buffer)
-        buffer.clear
-      end
-    end
+    ReaderEventParser.new(parser, infile).process_each_event
 
     outfile.write("]")
   end
