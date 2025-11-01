@@ -1,17 +1,18 @@
 #!/usr/bin/env ruby
+
 require 'nokogiri'
 require 'get_process_mem'
 
 if ARGV.length != 2
-  warn "Usage: ruby reader_parser.rb INPUT_FILE OUTPUT_FILE"
-  exit 1
+  puts "Usage: ruby reader_parser.rb input_file.xml output_file.xml"
+  exit
 end
 
 input_file, output_file = ARGV
 
-start_time = Time.now
 mem = GetProcessMem.new
 start_mem = mem.mb.round(2)
+start_time = Time.now
 
 File.open(output_file, 'w') do |out|
   out.puts '<?xml version="1.0" encoding="UTF-8"?>'

@@ -8,12 +8,11 @@ if ARGV.length != 2
   exit
 end
 
-input_file = ARGV[0]
-output_file = ARGV[1]
+input_file, output_file = ARGV
 
-start_time = Time.now
 mem = GetProcessMem.new
 start_mem = mem.mb.round(2)
+start_time = Time.now
 
 xml_content = File.read(input_file)
 

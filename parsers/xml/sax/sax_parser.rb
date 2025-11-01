@@ -2,60 +2,21 @@
 
 require 'nokogiri'
 require 'get_process_mem'
-
-class TransformHandler < Nokogiri::XML::SAX::Document
-  def initialize(output_io)
-    super()
-    @output = output_io
-    @current_element = nil
-  end
-
-  def start_document
-    @output.puts('<?xml version="1.0" encoding="UTF-8"?>')
-    @output.flush
-  end
-
-  def start_element(name, attrs = [])
-    element_name = (name == 'instock' ? 'tickets_available' : name)
-
-    @output.print("<#{element_name}>")
-    @output.flush
-    @current_element = element_name
-  end
-
-  def characters(string)
-    return if string.strip.empty?
-    @output.print(string)
-    @output.flush
-  end
-
-  def end_element(name)
-    element_name = (name == 'instock' ? 'tickets_available' : name)
-    @output.print("</#{element_name}>")
-    @output.flush
-    @current_element = nil
-  end
-
-  def end_document
-    @output.puts
-    @output.flush
-  end
-end
+require_relative '../../../processors/xml/sax/sax_event_parser'
 
 if ARGV.length != 2
   puts "Usage: ruby sax_parser.rb input.xml output.xml"
   exit 1
 end
 
-input_file  = ARGV[0]
-output_file = ARGV[1]
+input_file, output_file = ARGV
 
 start_time = Time.now
 mem = GetProcessMem.new
 start_mem = mem.mb.round(2)
 
 File.open(output_file, 'w') do |out|
-  parser = Nokogiri::XML::SAX::Parser.new(TransformHandler.new(out))
+  parser = Nokogiri::XML::SAX::Parser.new(SaxEventParser.new(out))
 
   File.open(input_file, 'r') do |input|
     parser.parse(input)
