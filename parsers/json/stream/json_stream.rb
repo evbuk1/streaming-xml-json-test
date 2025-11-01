@@ -2,11 +2,12 @@
 
 require 'oj'
 require 'get_process_mem'
+require 'time'
 require_relative '../../../processors/json/saj/saj_event_parser'
 
 if ARGV.length != 2
   puts "Usage: ruby json_stream.rb input.json output.json"
-  exit 1
+  exit
 end
 
 input_file, output_file = ARGV

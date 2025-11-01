@@ -2,11 +2,12 @@
 
 require 'nokogiri'
 require 'get_process_mem'
+require 'time'
 require_relative '../../../processors/xml/sax/sax_event_parser'
 
 if ARGV.length != 2
   puts "Usage: ruby sax_parser.rb input.xml output.xml"
-  exit 1
+  exit
 end
 
 input_file, output_file = ARGV

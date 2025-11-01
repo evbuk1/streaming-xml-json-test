@@ -1,5 +1,7 @@
+#!/usr/bin/env ruby
+
 require 'json'
-require 'benchmark'
+require 'time'
 require 'get_process_mem'
 
 def rename_key(obj, old_key, new_key)
@@ -17,8 +19,8 @@ def rename_key(obj, old_key, new_key)
 end
 
 if ARGV.length != 2
-  puts "Usage: ruby json_dom.rb <input.json> <output.json>"
-  exit 1
+  puts "Usage: ruby json_dom.rb input.json output.json"
+  exit
 end
 
 input_file, output_file = ARGV
